@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.google.common.collect.UnmodifiableIterator;
-import com.mojang.blaze3d.platform.InputConstants;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.adventurez.entity.goal.DragonFindOwnerGoal;
 import net.adventurez.entity.goal.DragonFlyRandomlyGoal;
 import net.adventurez.entity.goal.DragonSitGoal;
@@ -18,13 +18,9 @@ import net.adventurez.init.TagInit;
 import net.adventurez.mixin.accessor.LivingEntityAccessor;
 import net.adventurez.network.packet.DragonFireBreathPacket;
 import net.adventurez.network.packet.VelocityPacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.neoforged.fml.ModList;
+import net.adventurez.entity.client.DragonClientInput;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -258,21 +254,9 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
                 boolean shouldFlyUp = false;
                 boolean shouldFlyDown = false;
                 shouldFlyUp = ((LivingEntityAccessor) livingEntity).jumping(); // Pressing jump button for going upwards
-                if (this.level().isClientSide() && livingEntity instanceof LocalPlayer) {
-                    LocalPlayer clientPlayerEntity = (LocalPlayer) livingEntity;
-                    shouldFlyDown = InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), this.keyBind);
-                    if (clientPlayerEntity.input.left) {
-                        turningFloat -= 0.05F;
-                    }
-                    if (!clientPlayerEntity.input.left && turningFloat < 0.0F) {
-                        turningFloat = 0.0F;
-                    }
-                    if (clientPlayerEntity.input.right) {
-                        turningFloat += 0.05F;
-                    }
-                    if (!clientPlayerEntity.input.right && turningFloat > 0.0F) {
-                        turningFloat = 0.0F;
-                    }
+                if (this.level().isClientSide() && FMLEnvironment.dist.isClient()) {
+                    // Client-only input handling (LocalPlayer, key state) lives in DragonClientInput.
+                    shouldFlyDown = DragonClientInput.handleRiderInput(this, livingEntity);
                 }
 
                 this.setYRot(ConfigInit.CONFIG.heavy_dragon_flight ? this.getYRot() + Mth.wrapDegrees(turningFloat) : livingEntity.getYRot());
@@ -302,7 +286,7 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
                 if (shouldFlyUp && !this.isFlying && this.startFlyingTimer < 10) {
                     if (this.isInWater() && this.getFluidHeight(FluidTags.WATER) > 0.5D) {
                         if (!this.level().isClientSide() && this.getFirstPassenger() instanceof ServerPlayer) {
-                            ServerPlayNetworking.send((ServerPlayer) this.getFirstPassenger(), new VelocityPacket(this.getId(), 0.05F));
+                            PacketDistributor.sendToPlayer((ServerPlayer) this.getFirstPassenger(), new VelocityPacket(this.getId(), 0.05F));
                         }
                     } else {
                         this.startFlyingTimer++;
@@ -691,7 +675,6 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
         return !this.isLeashed();
     }
 
-    @Environment(EnvType.CLIENT)
     protected void showEmoteParticle(boolean positive) {
         ParticleOptions particleEffect = ParticleTypes.HEART;
         if (!positive) {
@@ -708,7 +691,6 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte status) {
         if (status == 7 || status == 9) {
             this.showEmoteParticle(true);
@@ -790,7 +772,7 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
             if (this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer) {
                 this.getOwner().sendSystemMessage(this.getCombatTracker().getDeathMessage());
             }
-            if (FabricLoader.getInstance().isModLoaded("dragonloot")) {
+            if (ModList.get().isLoaded("dragonloot")) {
                 this.spawnAtLocation(new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("dragonloot", "dragon_scale")), (int) (this.getSize() * this.level().getRandom().nextFloat())));
             }
         }
@@ -851,8 +833,8 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
         this.level().playSound(null, this, SoundEvents.ENDER_DRAGON_FLAP, this.getSoundSource(), 5.0f, 0.8f + this.random.nextFloat() * 0.3f);
     }
 
-    public void setKeyBind(String key) {
-        this.keyBind = InputConstants.getKey(key).getValue();
+    public void setKeyBind(int key) {
+        this.keyBind = key;
     }
 
     @Override
@@ -1079,20 +1061,12 @@ public class DragonEntity extends PathfinderMob implements ContainerListener, Ow
         RED_DRAGON = SynchedEntityData.defineId(DragonEntity.class, EntityDataSerializers.BOOLEAN);
     }
 
-    @Environment(EnvType.CLIENT)
-    public static void flyDragonDown(LocalPlayer player, String keyString) {
-        if (player.getVehicle() != null && player.getVehicle() instanceof DragonEntity)
-            ((DragonEntity) player.getVehicle()).setKeyBind(keyString);
+    public float getTurningFloat() {
+        return this.turningFloat;
     }
 
-    @Environment(EnvType.CLIENT)
-    public static void dragonFireBreath(LocalPlayer player) {
-        if (player.getVehicle() != null && player.getVehicle() instanceof DragonEntity dragonEntity && player.getVehicle().isAlive()) {
-            if (dragonEntity.getEntityData().get(DragonEntity.DRAGON_SIZE) >= 3) {
-                ClientPlayNetworking.send(new DragonFireBreathPacket());
-                ((DragonEntity) player.getVehicle()).fireBreathActive = true;
-            }
-        }
+    public void setTurningFloat(float turningFloat) {
+        this.turningFloat = turningFloat;
     }
 
 }

@@ -1,21 +1,17 @@
 package net.adventurez.network;
 
 import net.adventurez.network.packet.VelocityPacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-@Environment(EnvType.CLIENT)
 public class AdventureClientPacket {
 
-    @SuppressWarnings("resource")
-    public static void init() {
-        ClientPlayNetworking.registerGlobalReceiver(VelocityPacket.PACKET_ID, (payload, context) -> {
-            int entityId = payload.entityId();
-            float velocity = payload.velocity();
-            context.client().execute(() -> {
-                context.client().level.getEntity(entityId).push(0.0D, velocity, 0.0D);
-            });
+    public static void handleVelocity(VelocityPacket payload, IPayloadContext context) {
+        int entityId = payload.entityId();
+        float velocity = payload.velocity();
+        context.enqueueWork(() -> {
+            Entity entity = context.player().level().getEntity(entityId);
+            entity.push(0.0D, velocity, 0.0D);
         });
     }
 
