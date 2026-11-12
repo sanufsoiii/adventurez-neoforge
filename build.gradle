@@ -92,3 +92,7 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 21
     options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
 }
+
+jar {
+    from('LICENSE') { rename { "${it}_adventurez" } }
+}
