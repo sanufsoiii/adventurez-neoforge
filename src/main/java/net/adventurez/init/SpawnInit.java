@@ -7,7 +7,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.MobSpawnSettingsBuilder;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
@@ -26,10 +25,6 @@ public class SpawnInit {
 
     public static void init() {
         Registry.register(NeoForgeRegistries.BIOME_MODIFIER_SERIALIZERS, AdventureMain.identifierOf("spawns"), SpawnBiomeModifier.CODEC);
-    }
-
-    public static void registerModEvents(IEventBus modBus) {
-        modBus.addListener(RegisterSpawnPlacementsEvent.class, SpawnInit::setSpawnRestriction);
     }
 
     /**
@@ -83,7 +78,7 @@ public class SpawnInit {
         }
     }
 
-    private static void setSpawnRestriction(RegisterSpawnPlacementsEvent event) {
+    public static void setSpawnRestriction(RegisterSpawnPlacementsEvent event) {
         event.register(EntityInit.MINI_BLACKSTONE_GOLEM, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MiniBlackstoneGolemEntity::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(EntityInit.NECROMANCER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, NecromancerEntity::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(EntityInit.SUMMONER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SummonerEntity::canSpawn, RegisterSpawnPlacementsEvent.Operation.REPLACE);

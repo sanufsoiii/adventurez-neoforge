@@ -14,7 +14,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
 @SuppressWarnings("unchecked")
@@ -111,11 +110,7 @@ public class EntityInit {
     public static void init() {
     }
 
-    public static void registerModEvents(IEventBus modBus) {
-        modBus.addListener(EntityAttributeCreationEvent.class, EntityInit::registerAttributes);
-    }
-
-    private static void registerAttributes(EntityAttributeCreationEvent event) {
+    public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(BLACKSTONE_GOLEM, BlackstoneGolemEntity.createStoneGolemAttributes().build());
         event.put(MINI_BLACKSTONE_GOLEM, MiniBlackstoneGolemEntity.createSmallStoneGolemAttributes().build());
         event.put(PIGLIN_BEAST, PiglinBeastEntity.createPiglinBeastAttributes().build());

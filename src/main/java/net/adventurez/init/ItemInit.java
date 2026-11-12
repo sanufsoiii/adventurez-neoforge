@@ -33,7 +33,6 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.alchemy.Potions;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
 public class ItemInit {
@@ -130,10 +129,8 @@ public class ItemInit {
                         .displayItems((parameters, output) -> CreativeTabEntries.entries().forEach(output::accept)).build());
     }
 
-    public static void registerGameEvents(IEventBus gameBus) {
-        gameBus.addListener(RegisterBrewingRecipesEvent.class, event -> {
-            event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ORC_SKIN, Potions.TURTLE_MASTER);
-            event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ENDER_WHALE_SKIN, Potions.SLOW_FALLING);
-        });
+    public static void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
+        event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ORC_SKIN, Potions.TURTLE_MASTER);
+        event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ENDER_WHALE_SKIN, Potions.SLOW_FALLING);
     }
 }
