@@ -5,6 +5,7 @@ import net.adventurez.config.AdventureConfig;
 import net.adventurez.init.KeybindInit;
 import net.adventurez.init.ModelInit;
 import net.adventurez.init.RenderInit;
+import net.adventurez.port.assets.OriginalAssetsPackFinder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -13,6 +14,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public class AdventureClient {
         KeybindInit.init(modBus, NeoForge.EVENT_BUS);
         ModelInit.init(modBus);
         RenderInit.init(modBus);
+
+        // Original ARR assets from the player's own jar in resourcepacks/ (never bundled, never downloaded).
+        modBus.addListener(AddPackFindersEvent.class, OriginalAssetsPackFinder::onAddPackFinders);
 
         // Port self-check: log when the title screen is reached, optionally exit (runClientSmoke).
         NeoForge.EVENT_BUS.addListener(ScreenEvent.Opening.class, AdventureClient::onScreenOpening);
