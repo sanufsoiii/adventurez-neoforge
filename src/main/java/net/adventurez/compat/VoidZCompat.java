@@ -20,20 +20,20 @@ import net.minecraft.world.level.block.state.properties.Property;
  */
 public class VoidZCompat {
 
-    /** net.voidz.init.DimensionInit.VOID_WORLD */
+    /** VoidZ DimensionInit.VOID_WORLD */
     public static final ResourceKey<Level> VOID_WORLD = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("voidz", "void"));
 
-    /** net.voidz.init.BlockInit.PORTAL */
+    /** VoidZ BlockInit.PORTAL */
     public static Block portal() {
         return block("void_portal");
     }
 
-    /** net.voidz.init.BlockInit.VOID_STONE */
+    /** VoidZ BlockInit.VOID_STONE */
     public static Block voidStone() {
         return block("void_stone");
     }
 
-    /** net.voidz.init.BlockInit.INFESTED_VOID */
+    /** VoidZ BlockInit.INFESTED_VOID */
     public static Block infestedVoidStone() {
         return block("infested_void_stone");
     }
