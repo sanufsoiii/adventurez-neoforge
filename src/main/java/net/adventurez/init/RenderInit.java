@@ -8,33 +8,32 @@ import net.adventurez.init.ParticleInit.ShardParticle;
 import net.adventurez.init.ParticleInit.SprintParticle;
 import net.adventurez.init.ParticleInit.VoidCloudParticle;
 import net.adventurez.init.ParticleInit.FartParticle;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
-@Environment(EnvType.CLIENT)
 public class RenderInit {
 
     private static final ResourceLocation WITHERED_TEXTURE = AdventureMain.identifierOf("textures/misc/withered.png");
     private static final ResourceLocation ACTIVE_ARMOR_TEXTURE = AdventureMain.identifierOf("textures/misc/active_armor.png");
 
-    public static final boolean isCanvasLoaded = FabricLoader.getInstance().isModLoaded("canvas");
-    public static final boolean isIrisLoaded = FabricLoader.getInstance().isModLoaded("iris");
-    public static final boolean isSodiumLoaded = FabricLoader.getInstance().isModLoaded("sodium");
+    public static final boolean isCanvasLoaded = ModList.get().isLoaded("canvas");
+    public static final boolean isIrisLoaded = ModList.get().isLoaded("iris");
+    public static final boolean isSodiumLoaded = ModList.get().isLoaded("sodium");
 
     public static final ModelLayerLocation BLACKSTONE_GOLEM_LAYER = new ModelLayerLocation(AdventureMain.identifierOf("blackstone_golem_render_layer"), "blackstone_golem_render_layer");
     public static final ModelLayerLocation THROWN_ROCK_LAYER = new ModelLayerLocation(AdventureMain.identifierOf("thrown_rock_render_layer"), "thrown_rock_render_layer");
@@ -72,96 +71,114 @@ public class RenderInit {
     public static final ModelLayerLocation DUBIOUS_PUMPKIN_LAYER = new ModelLayerLocation(AdventureMain.identifierOf("dubious_pumpkin_render_layer"), "dubious_pumpkin_render_layer");
     public static final ModelLayerLocation CRYSTAL_BEETLE_LAYER = new ModelLayerLocation(AdventureMain.identifierOf("crystal_beetle_render_layer"), "crystal_beetle_render_layer");
 
-    public static void init() {
+    public static void init(IEventBus modBus) {
+        modBus.addListener(EntityRenderersEvent.RegisterRenderers.class, RenderInit::registerRenderers);
+        modBus.addListener(EntityRenderersEvent.RegisterLayerDefinitions.class, RenderInit::registerLayers);
+        modBus.addListener(FMLClientSetupEvent.class, event -> event.enqueueWork(RenderInit::registerBlockRenderLayers));
+        modBus.addListener(RegisterParticleProvidersEvent.class, RenderInit::registerParticles);
+        modBus.addListener(RegisterGuiLayersEvent.class, event -> event.registerAboveAll(AdventureMain.identifierOf("hud"), RenderInit::renderHud));
+    }
+
+    private static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // Entity Renderer
-        EntityRendererRegistry.register(EntityInit.BLACKSTONE_GOLEM, BlackstoneGolemRenderer::new);
-        EntityRendererRegistry.register(EntityInit.THROWN_ROCK, ThrownRockRenderer::new);
-        EntityRendererRegistry.register(EntityInit.GILDED_BLACKSTONE_SHARD, GildedStoneRenderer::new);
-        EntityRendererRegistry.register(EntityInit.MINI_BLACKSTONE_GOLEM, MiniBlackstoneGolemRenderer::new);
-        EntityRendererRegistry.register(EntityInit.PIGLIN_BEAST, PiglinBeastRenderer::new);
-        EntityRendererRegistry.register(EntityInit.NIGHTMARE, NightmareRenderer::new);
-        EntityRendererRegistry.register(EntityInit.SOUL_REAPER, SoulReaperRenderer::new);
-        EntityRendererRegistry.register(EntityInit.NECROMANCER, NecromancerRenderer::new);
-        EntityRendererRegistry.register(EntityInit.WITHER_PUPPET, WitherPuppetRenderer::new);
-        EntityRendererRegistry.register(EntityInit.SKELETON_VANGUARD, SkeletonVanguardRenderer::new);
-        EntityRendererRegistry.register(EntityInit.SUMMONER, SummonerRenderer::new);
-        EntityRendererRegistry.register(EntityInit.BLAZE_GUARDIAN, BlazeGuardianRenderer::new);
-        EntityRendererRegistry.register(EntityInit.THE_EYE, TheEyeRenderer::new);
-        EntityRendererRegistry.register(EntityInit.VOID_SHADOW, VoidShadowRenderer::new);
-        EntityRendererRegistry.register(EntityInit.TINY_EYE, TinyEyeRenderer::new);
-        EntityRendererRegistry.register(EntityInit.RED_FUNGUS, RedFungusRenderer::new);
-        EntityRendererRegistry.register(EntityInit.BROWN_FUNGUS, BrownFungusRenderer::new);
-        EntityRendererRegistry.register(EntityInit.ORC, OrcRenderer::new);
-        EntityRendererRegistry.register(EntityInit.DRAGON, DragonRenderer::new);
-        EntityRendererRegistry.register(EntityInit.MAMMOTH, MammothRenderer::new);
-        EntityRendererRegistry.register(EntityInit.VOID_FRAGMENT, VoidFragmentRenderer::new);
-        EntityRendererRegistry.register(EntityInit.VOID_SHADE, VoidShadeRenderer::new);
-        EntityRendererRegistry.register(EntityInit.VOID_BULLET, VoidBulletRenderer::new);
-        EntityRendererRegistry.register(EntityInit.FIRE_BREATH, NoopRenderer::new);
-        EntityRendererRegistry.register(EntityInit.BLAZE_GUARDIAN_SHIELD, NoopRenderer::new);
-        EntityRendererRegistry.register(EntityInit.ENDER_WHALE, EnderWhaleRenderer::new);
-        EntityRendererRegistry.register(EntityInit.IGUANA, IguanaRenderer::new);
-        EntityRendererRegistry.register(EntityInit.AMETHYST_GOLEM, AmethystGolemRenderer::new);
-        EntityRendererRegistry.register(EntityInit.AMETHYST_SHARD, AmethystShardRenderer::new);
-        EntityRendererRegistry.register(EntityInit.DESERT_RHINO, DesertRhinoRenderer::new);
-        EntityRendererRegistry.register(EntityInit.VOID_CLOUD, NoopRenderer::new);
-        EntityRendererRegistry.register(EntityInit.SHAMAN, ShamanRenderer::new);
-        EntityRendererRegistry.register(EntityInit.DEER, DeerRenderer::new);
-        EntityRendererRegistry.register(EntityInit.SKUNK, SkunkRenderer::new);
-        EntityRendererRegistry.register(EntityInit.ENDERWARTHOG, EnderwarthogRenderer::new);
-        EntityRendererRegistry.register(EntityInit.DUBIOUS_PUMPKIN, DubiousPumpkinRenderer::new);
-        EntityRendererRegistry.register(EntityInit.CRYSTAL_BEETLE, CrystalBeetleRenderer::new);
+        event.registerEntityRenderer(EntityInit.BLACKSTONE_GOLEM, BlackstoneGolemRenderer::new);
+        event.registerEntityRenderer(EntityInit.THROWN_ROCK, ThrownRockRenderer::new);
+        event.registerEntityRenderer(EntityInit.GILDED_BLACKSTONE_SHARD, GildedStoneRenderer::new);
+        event.registerEntityRenderer(EntityInit.MINI_BLACKSTONE_GOLEM, MiniBlackstoneGolemRenderer::new);
+        event.registerEntityRenderer(EntityInit.PIGLIN_BEAST, PiglinBeastRenderer::new);
+        event.registerEntityRenderer(EntityInit.NIGHTMARE, NightmareRenderer::new);
+        event.registerEntityRenderer(EntityInit.SOUL_REAPER, SoulReaperRenderer::new);
+        event.registerEntityRenderer(EntityInit.NECROMANCER, NecromancerRenderer::new);
+        event.registerEntityRenderer(EntityInit.WITHER_PUPPET, WitherPuppetRenderer::new);
+        event.registerEntityRenderer(EntityInit.SKELETON_VANGUARD, SkeletonVanguardRenderer::new);
+        event.registerEntityRenderer(EntityInit.SUMMONER, SummonerRenderer::new);
+        event.registerEntityRenderer(EntityInit.BLAZE_GUARDIAN, BlazeGuardianRenderer::new);
+        event.registerEntityRenderer(EntityInit.THE_EYE, TheEyeRenderer::new);
+        event.registerEntityRenderer(EntityInit.VOID_SHADOW, VoidShadowRenderer::new);
+        event.registerEntityRenderer(EntityInit.TINY_EYE, TinyEyeRenderer::new);
+        event.registerEntityRenderer(EntityInit.RED_FUNGUS, RedFungusRenderer::new);
+        event.registerEntityRenderer(EntityInit.BROWN_FUNGUS, BrownFungusRenderer::new);
+        event.registerEntityRenderer(EntityInit.ORC, OrcRenderer::new);
+        event.registerEntityRenderer(EntityInit.DRAGON, DragonRenderer::new);
+        event.registerEntityRenderer(EntityInit.MAMMOTH, MammothRenderer::new);
+        event.registerEntityRenderer(EntityInit.VOID_FRAGMENT, VoidFragmentRenderer::new);
+        event.registerEntityRenderer(EntityInit.VOID_SHADE, VoidShadeRenderer::new);
+        event.registerEntityRenderer(EntityInit.VOID_BULLET, VoidBulletRenderer::new);
+        event.registerEntityRenderer(EntityInit.FIRE_BREATH, NoopRenderer::new);
+        event.registerEntityRenderer(EntityInit.BLAZE_GUARDIAN_SHIELD, NoopRenderer::new);
+        event.registerEntityRenderer(EntityInit.ENDER_WHALE, EnderWhaleRenderer::new);
+        event.registerEntityRenderer(EntityInit.IGUANA, IguanaRenderer::new);
+        event.registerEntityRenderer(EntityInit.AMETHYST_GOLEM, AmethystGolemRenderer::new);
+        event.registerEntityRenderer(EntityInit.AMETHYST_SHARD, AmethystShardRenderer::new);
+        event.registerEntityRenderer(EntityInit.DESERT_RHINO, DesertRhinoRenderer::new);
+        event.registerEntityRenderer(EntityInit.VOID_CLOUD, NoopRenderer::new);
+        event.registerEntityRenderer(EntityInit.SHAMAN, ShamanRenderer::new);
+        event.registerEntityRenderer(EntityInit.DEER, DeerRenderer::new);
+        event.registerEntityRenderer(EntityInit.SKUNK, SkunkRenderer::new);
+        event.registerEntityRenderer(EntityInit.ENDERWARTHOG, EnderwarthogRenderer::new);
+        event.registerEntityRenderer(EntityInit.DUBIOUS_PUMPKIN, DubiousPumpkinRenderer::new);
+        event.registerEntityRenderer(EntityInit.CRYSTAL_BEETLE, CrystalBeetleRenderer::new);
 
+        // Block Entity Renderer
+        event.registerBlockEntityRenderer(BlockInit.CHISELED_POLISHED_BLACKSTONE_HOLDER_ENTITY, ChiseledPolishedBlackstoneHolderRenderer::new);
+        event.registerBlockEntityRenderer(BlockInit.PIGLIN_FLAG_ENTITY, PiglinFlagRenderer::new);
+        event.registerBlockEntityRenderer(BlockInit.SHADOW_CHEST_ENTITY, ChestRenderer::new);
+    }
+
+    private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         // Entity Layer
-        EntityModelLayerRegistry.registerModelLayer(BLACKSTONE_GOLEM_LAYER, BlackstoneGolemModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(THROWN_ROCK_LAYER, RockModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(GILDED_STONE_LAYER, GildedStoneModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(MINI_BLACKSTONE_GOLEM_LAYER, MiniBlackstoneGolemModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(PIGLIN_BEAST_LAYER, PiglinBeastModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SOUL_REAPER_LAYER, SoulReaperModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(NECROMANCER_LAYER, NecromancerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(WITHER_PUPPET_LAYER, WitherPuppetModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SKELETON_VANGUARD_LAYER, SkeletonVanguardModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SUMMONER_LAYER, SummonerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(BLAZE_GUARDIAN_LAYER, BlazeGuardianModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(THE_EYE_LAYER, TheEyeModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(VOID_SHADOW_LAYER, VoidShadowModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(TINY_EYE_LAYER, TinyEyeModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(RED_FUNGUS_LAYER, RedFungusModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(BROWN_FUNGUS_LAYER, BrownFungusModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ORC_LAYER, OrcModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DRAGON_LAYER, DragonModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(MAMMOTH_LAYER, MammothModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(VOID_FRAGMENT_LAYER, VoidFragmentModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(VOID_SHADE_LAYER, VoidShadeModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(VOID_BULLET_LAYER, VoidBulletModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(PIGLIN_FLAG_LAYER, PiglinFlagRenderer::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ENDER_WHALE_LAYER, EnderWhaleModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(IGUANA_LAYER, IguanaModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(AMETHYST_GOLEM_LAYER, AmethystGolemModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(AMETHYST_SHARD_LAYER, AmethystShardModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DESERT_RHINO_LAYER, DesertRhinoModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SHAMAN_LAYER, ShamanModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DEER_LAYER, DeerModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(SKUNK_LAYER, SkunkModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(ENDERWARTHOG_LAYER, EnderwarthogModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(DUBIOUS_PUMPKIN_LAYER, DubiousPumpkinModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(CRYSTAL_BEETLE_LAYER, CrystalBeetleModel::getTexturedModelData);
+        event.registerLayerDefinition(BLACKSTONE_GOLEM_LAYER, BlackstoneGolemModel::getTexturedModelData);
+        event.registerLayerDefinition(THROWN_ROCK_LAYER, RockModel::getTexturedModelData);
+        event.registerLayerDefinition(GILDED_STONE_LAYER, GildedStoneModel::getTexturedModelData);
+        event.registerLayerDefinition(MINI_BLACKSTONE_GOLEM_LAYER, MiniBlackstoneGolemModel::getTexturedModelData);
+        event.registerLayerDefinition(PIGLIN_BEAST_LAYER, PiglinBeastModel::getTexturedModelData);
+        event.registerLayerDefinition(SOUL_REAPER_LAYER, SoulReaperModel::getTexturedModelData);
+        event.registerLayerDefinition(NECROMANCER_LAYER, NecromancerModel::getTexturedModelData);
+        event.registerLayerDefinition(WITHER_PUPPET_LAYER, WitherPuppetModel::getTexturedModelData);
+        event.registerLayerDefinition(SKELETON_VANGUARD_LAYER, SkeletonVanguardModel::getTexturedModelData);
+        event.registerLayerDefinition(SUMMONER_LAYER, SummonerModel::getTexturedModelData);
+        event.registerLayerDefinition(BLAZE_GUARDIAN_LAYER, BlazeGuardianModel::getTexturedModelData);
+        event.registerLayerDefinition(THE_EYE_LAYER, TheEyeModel::getTexturedModelData);
+        event.registerLayerDefinition(VOID_SHADOW_LAYER, VoidShadowModel::getTexturedModelData);
+        event.registerLayerDefinition(TINY_EYE_LAYER, TinyEyeModel::getTexturedModelData);
+        event.registerLayerDefinition(RED_FUNGUS_LAYER, RedFungusModel::getTexturedModelData);
+        event.registerLayerDefinition(BROWN_FUNGUS_LAYER, BrownFungusModel::getTexturedModelData);
+        event.registerLayerDefinition(ORC_LAYER, OrcModel::getTexturedModelData);
+        event.registerLayerDefinition(DRAGON_LAYER, DragonModel::getTexturedModelData);
+        event.registerLayerDefinition(MAMMOTH_LAYER, MammothModel::getTexturedModelData);
+        event.registerLayerDefinition(VOID_FRAGMENT_LAYER, VoidFragmentModel::getTexturedModelData);
+        event.registerLayerDefinition(VOID_SHADE_LAYER, VoidShadeModel::getTexturedModelData);
+        event.registerLayerDefinition(VOID_BULLET_LAYER, VoidBulletModel::getTexturedModelData);
+        event.registerLayerDefinition(PIGLIN_FLAG_LAYER, PiglinFlagRenderer::getTexturedModelData);
+        event.registerLayerDefinition(ENDER_WHALE_LAYER, EnderWhaleModel::getTexturedModelData);
+        event.registerLayerDefinition(IGUANA_LAYER, IguanaModel::getTexturedModelData);
+        event.registerLayerDefinition(AMETHYST_GOLEM_LAYER, AmethystGolemModel::getTexturedModelData);
+        event.registerLayerDefinition(AMETHYST_SHARD_LAYER, AmethystShardModel::getTexturedModelData);
+        event.registerLayerDefinition(DESERT_RHINO_LAYER, DesertRhinoModel::getTexturedModelData);
+        event.registerLayerDefinition(SHAMAN_LAYER, ShamanModel::getTexturedModelData);
+        event.registerLayerDefinition(DEER_LAYER, DeerModel::getTexturedModelData);
+        event.registerLayerDefinition(SKUNK_LAYER, SkunkModel::getTexturedModelData);
+        event.registerLayerDefinition(ENDERWARTHOG_LAYER, EnderwarthogModel::getTexturedModelData);
+        event.registerLayerDefinition(DUBIOUS_PUMPKIN_LAYER, DubiousPumpkinModel::getTexturedModelData);
+        event.registerLayerDefinition(CRYSTAL_BEETLE_LAYER, CrystalBeetleModel::getTexturedModelData);
+    }
 
-        // Blocks
-        BlockEntityRenderers.register(BlockInit.CHISELED_POLISHED_BLACKSTONE_HOLDER_ENTITY, ChiseledPolishedBlackstoneHolderRenderer::new);
-        BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.CHISELED_POLISHED_BLACKSTONE_HOLDER, RenderType.cutout());
-        BlockEntityRenderers.register(BlockInit.PIGLIN_FLAG_ENTITY, PiglinFlagRenderer::new);
-        BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.PIGLIN_FLAG, RenderType.cutout());
-        BlockEntityRenderers.register(BlockInit.SHADOW_CHEST_ENTITY, ChestRenderer::new);
+    private static void registerBlockRenderLayers() {
+        // Blocks (block entity renderers are registered in registerRenderers)
+        ItemBlockRenderTypes.setRenderLayer(BlockInit.CHISELED_POLISHED_BLACKSTONE_HOLDER, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BlockInit.PIGLIN_FLAG, RenderType.cutout());
+    }
 
+    private static void registerParticles(RegisterParticleProvidersEvent event) {
         // Particles
-        ParticleFactoryRegistry.getInstance().register(ParticleInit.AMETHYST_SHARD_PARTICLE, ShardParticle.ShardFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleInit.VOID_CLOUD_PARTICLE, VoidCloudParticle.CloudFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleInit.SPRINT_PARTICLE, SprintParticle.SprintFactory::new);
-        ParticleFactoryRegistry.getInstance().register(ParticleInit.FART_PARTICLE, FartParticle.Factory::new);
+        event.registerSpriteSet(ParticleInit.AMETHYST_SHARD_PARTICLE, ShardParticle.ShardFactory::new);
+        event.registerSpriteSet(ParticleInit.VOID_CLOUD_PARTICLE, VoidCloudParticle.CloudFactory::new);
+        event.registerSpriteSet(ParticleInit.SPRINT_PARTICLE, SprintParticle.SprintFactory::new);
+        event.registerSpriteSet(ParticleInit.FART_PARTICLE, FartParticle.Factory::new);
+    }
 
-        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+    private static void renderHud(GuiGraphics drawContext, DeltaTracker tickDelta) {
+        {
             Minecraft client = Minecraft.getInstance();
             if (!client.options.hideGui&& !client.player.isCreative()&& !client.player.isSpectator()) {
                 ItemStack itemStack = client.player.getItemBySlot(EquipmentSlot.CHEST);
@@ -199,6 +216,6 @@ public class RenderInit {
                     drawContext.setColor(1.0F, 1.0F, 1.0F, 1.0F);
                 }
             }
-        });
+        }
     }
 }
