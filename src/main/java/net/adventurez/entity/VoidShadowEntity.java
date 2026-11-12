@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.adventurez.compat.VoidZCompat;
 import net.adventurez.block.ShadowChest;
 import net.adventurez.entity.nonliving.ThrownRockEntity;
 import net.adventurez.entity.nonliving.VoidCloudEntity;
@@ -16,8 +18,7 @@ import net.adventurez.init.EntityInit;
 import net.adventurez.init.SoundInit;
 import net.adventurez.init.TagInit;
 import net.adventurez.network.packet.VelocityPacket;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -67,10 +68,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.voidz.block.VoidStoneBlock;
-import net.voidz.block.entity.PortalBlockEntity;
-import net.voidz.init.BlockInit;
-import net.voidz.init.DimensionInit;
 
 public class VoidShadowEntity extends FlyingMob implements Enemy {
 
@@ -96,7 +93,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
         this.bossBar = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS));
         this.xpReward = 100;
         this.moveControl = new VoidShadowEntity.VoidShadowMoveControl(this);
-        this.isInVoidDungeon = FabricLoader.getInstance().isModLoaded("voidz") && world.dimension() == DimensionInit.VOID_WORLD;
+        this.isInVoidDungeon = ModList.get().isLoaded("voidz") && world.dimension() == VoidZCompat.VOID_WORLD;
     }
 
     @Override
@@ -214,9 +211,9 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData) {
-        if (!this.hasVoidMiddleCoordinates() && FabricLoader.getInstance().isModLoaded("voidz")) {
+        if (!this.hasVoidMiddleCoordinates() && ModList.get().isLoaded("voidz")) {
             // For test purpose, use spawn egg on portal block
-            if (world.getBlockState(this.blockPosition().below()).getBlock() == BlockInit.PORTAL) {
+            if (world.getBlockState(this.blockPosition().below()).getBlock() == VoidZCompat.portal()) {
                 this.setVoidMiddle(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
             }
         }
@@ -320,7 +317,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
         if (!this.level().isClientSide()) {
             if (!this.blockPosList.isEmpty()) {
                 for (int u = 0; u < this.blockPosList.size(); ++u) {
-                    this.level().setBlockAndUpdate(this.blockPosList.get(u), BlockInit.VOID_STONE.defaultBlockState());
+                    this.level().setBlockAndUpdate(this.blockPosList.get(u), VoidZCompat.voidStone().defaultBlockState());
                     this.level().playSound(null, this.blockPosList.get(u), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1F, 1F);
                 }
             }
@@ -396,10 +393,8 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
                 this.level().setBlock(pos, state, 3);
                 state.getBlock().setPlacedBy(this.level(), pos, state, null, ItemStack.EMPTY);
 
-                if (this.level().getBlockEntity(this.getVoidMiddle().below()) != null
-                        && this.level().getBlockEntity(this.getVoidMiddle().below()) instanceof PortalBlockEntity portalBlockEntity) {
-                    portalBlockEntity.bossTime = (int) this.level().getLevelData().getGameTime();
-                }
+                // TODO-PORT: VoidZ compat untested (PortalBlockEntity.bossTime set by name, see VoidZCompat)
+                VoidZCompat.setPortalBossTime(this.level().getBlockEntity(this.getVoidMiddle().below()), (int) this.level().getLevelData().getGameTime());
             } else {
                 this.level().setBlock(this.blockPosition(), Blocks.DRAGON_EGG.defaultBlockState(), 3);
             }
@@ -659,7 +654,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
                     }
                 }
                 for (int u = 0; u < this.voidShadow.blockPosList.size(); ++u) {
-                    this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), BlockInit.VOID_STONE.defaultBlockState().setValue(VoidStoneBlock.ACTIVATED, true));
+                    this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), VoidZCompat.activatedVoidStone(true));
                 }
 
             }
@@ -692,7 +687,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
         public void stop() {
             canStartTicker++;
             for (int u = 0; u < this.voidShadow.blockPosList.size(); ++u) {
-                this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), BlockInit.VOID_STONE.defaultBlockState());
+                this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), VoidZCompat.voidStone().defaultBlockState());
                 this.voidShadow.level().playSound(null, this.voidShadow.blockPosList.get(u), SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1F, 1F);
             }
             if (!this.voidShadow.blockPosList.isEmpty()) {
@@ -840,7 +835,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
                     }
                 }
                 for (int u = 0; u < this.voidShadow.blockPosList.size(); ++u) {
-                    this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), BlockInit.INFESTED_VOID.defaultBlockState());
+                    this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), VoidZCompat.infestedVoidStone().defaultBlockState());
                 }
                 ((ServerLevel) this.voidShadow.level()).playSound(null, this.voidShadow, SoundInit.SHADOW_CAST_EVENT, SoundSource.HOSTILE, 20.0F, 1.0F);
             }
@@ -848,7 +843,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
                 if (this.voidShadow.getHealth() < this.voidShadow.getMaxHealth() / 10 && !playerList.isEmpty()) {
                     for (int i = 0; i < playerList.size(); i++) {
                         if (playerList.get(i) instanceof ServerPlayer serverPlayerEntity) {
-                            ServerPlayNetworking.send(serverPlayerEntity, new VelocityPacket(playerList.get(i).getId(), this.voidShadow.random.nextFloat() * 2F));
+                            PacketDistributor.sendToPlayer(serverPlayerEntity, new VelocityPacket(playerList.get(i).getId(), this.voidShadow.random.nextFloat() * 2F));
                         }
                     }
                     ((ServerLevel) this.voidShadow.level()).playSound(null, this.voidShadow, SoundInit.SHADOW_IDLE_EVENT, SoundSource.HOSTILE, 20.0F, 1.0F);
@@ -882,7 +877,7 @@ public class VoidShadowEntity extends FlyingMob implements Enemy {
             ((ServerLevel) this.voidShadow.level()).playSound(null, this.voidShadow, SoundInit.SHADOW_CAST_EVENT, SoundSource.HOSTILE, 20.0F, 1.0F);
             insanityStartTicker = 0;
             for (int u = 0; u < this.voidShadow.blockPosList.size(); ++u) {
-                this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), BlockInit.VOID_STONE.defaultBlockState());
+                this.voidShadow.level().setBlockAndUpdate(this.voidShadow.blockPosList.get(u), VoidZCompat.voidStone().defaultBlockState());
             }
             if (!this.playerList.isEmpty()) {
                 this.playerList.clear();
