@@ -28,7 +28,9 @@ public class SpawnHelperMixin {
 
     private static final WeightedRandomList<MobSpawnSettings.SpawnerData> ADDED_SPAWNS;
 
-    @Inject(method = "mobsAt", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/levelgen/structure/structures/NetherFortressStructure;FORTRESS_ENEMIES:Lnet/minecraft/util/random/WeightedRandomList;", ordinal = 0), cancellable = true)
+    // PORT: NeoForge replaced the vanilla "return FORTRESS_ENEMIES" with a lookup of the fortress structure's
+    // spawn overrides. The first instruction of that branch (registryAccess() ordinal 0) is the same point.
+    @Inject(method = "mobsAt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/StructureManager;registryAccess()Lnet/minecraft/core/RegistryAccess;", ordinal = 0), cancellable = true)
     private static void getSpawnEntriesMixin(ServerLevel world, StructureManager structureAccessor, ChunkGenerator chunkGenerator, MobCategory spawnGroup, BlockPos pos,
             @Nullable Holder<Biome> biomeEntry, CallbackInfoReturnable<WeightedRandomList<MobSpawnSettings.SpawnerData>> info) {
         List<MobSpawnSettings.SpawnerData> spawnersList = new ArrayList<>(NetherFortressStructure.FORTRESS_ENEMIES.unwrap());

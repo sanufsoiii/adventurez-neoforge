@@ -17,8 +17,9 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(PiglinAi.class)
 public class PiglinBrainMixin {
 
+    // PORT: NeoForge's isWearingGold keeps no Iterable local (iterator() is called directly), so it is not captured.
     @Inject(method = "isWearingGold(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void wearsGoldArmorMixin(LivingEntity entity, CallbackInfoReturnable<Boolean> info, Iterable<ItemStack> iterable, Iterator<ItemStack> iterator, ItemStack stack, Item item) {
+    private static void wearsGoldArmorMixin(LivingEntity entity, CallbackInfoReturnable<Boolean> info, Iterator<ItemStack> iterator, ItemStack stack, Item item) {
         if (stack.is(TagInit.PIGLIN_NOT_ATTACK_ITEMS))
             info.setReturnValue(true);
     }
