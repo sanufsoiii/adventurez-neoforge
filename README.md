@@ -6,6 +6,12 @@ Unofficial port of **[AdventureZ](https://github.com/Globox1997/AdventureZ)** by
 
 The port builds and the client starts to the main menu without errors. **Gameplay has not been tested in a world yet**: expect bugs, and please report them (see below). Dedicated server has not been tested either.
 
+## Download
+
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/adventurez-unofficial)
+- [Modrinth](https://modrinth.com/mod/adventurez-unofficial)
+- [GitHub Releases](https://github.com/sanufsoiii/adventurez-neoforge/releases)
+
 ## Requirements
 
 - Minecraft 1.21.1, NeoForge 21.1.200 or newer
