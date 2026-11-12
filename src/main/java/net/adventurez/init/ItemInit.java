@@ -8,9 +8,6 @@ import com.mojang.serialization.Codec;
 import net.adventurez.AdventureMain;
 import net.adventurez.item.*;
 import net.adventurez.item.component.GildedActivationComponent;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -36,6 +33,8 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SmithingTemplateItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.alchemy.Potions;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
 public class ItemInit {
 
@@ -117,7 +116,7 @@ public class ItemInit {
     }
 
     private static Item register(ResourceLocation id, Item item) {
-        ItemGroupEvents.modifyEntriesEvent(ADVENTUREZ_ITEM_GROUP).register(entries -> entries.accept(item));
+        CreativeTabEntries.add(ADVENTUREZ_ITEM_GROUP, item);
         return Registry.register(BuiltInRegistries.ITEM, id, item);
     }
 
@@ -127,12 +126,14 @@ public class ItemInit {
 
     public static void init() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ADVENTUREZ_ITEM_GROUP,
-                FabricItemGroup.builder().icon(() -> new ItemStack(ItemInit.HANDBOOK)).title(Component.translatable("item.adventurez.item_group")).build());
-
-        FabricBrewingRecipeRegistryBuilder.BUILD.register((builder) -> {
-            builder.addMix(Potions.AWKWARD, ItemInit.ORC_SKIN, Potions.TURTLE_MASTER);
-            builder.addMix(Potions.AWKWARD, ItemInit.ENDER_WHALE_SKIN, Potions.SLOW_FALLING);
-        });
+                CreativeModeTab.builder().icon(() -> new ItemStack(ItemInit.HANDBOOK)).title(Component.translatable("item.adventurez.item_group"))
+                        .displayItems((parameters, output) -> CreativeTabEntries.entries().forEach(output::accept)).build());
     }
 
+    public static void registerGameEvents(IEventBus gameBus) {
+        gameBus.addListener(RegisterBrewingRecipesEvent.class, event -> {
+            event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ORC_SKIN, Potions.TURTLE_MASTER);
+            event.getBuilder().addMix(Potions.AWKWARD, ItemInit.ENDER_WHALE_SKIN, Potions.SLOW_FALLING);
+        });
+    }
 }

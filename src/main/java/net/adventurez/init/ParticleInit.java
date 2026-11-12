@@ -3,10 +3,6 @@ package net.adventurez.init;
 import net.minecraft.client.particle.*;
 
 import net.adventurez.AdventureMain;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.particle.v1.FabricSpriteProvider;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -16,10 +12,10 @@ import java.util.Random;
 
 public class ParticleInit {
 
-    public static final SimpleParticleType AMETHYST_SHARD_PARTICLE = FabricParticleTypes.simple();
-    public static final SimpleParticleType VOID_CLOUD_PARTICLE = FabricParticleTypes.simple();
-    public static final SimpleParticleType SPRINT_PARTICLE = FabricParticleTypes.simple();
-    public static final SimpleParticleType FART_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType AMETHYST_SHARD_PARTICLE = new SimpleParticleType(false);
+    public static final SimpleParticleType VOID_CLOUD_PARTICLE = new SimpleParticleType(false);
+    public static final SimpleParticleType SPRINT_PARTICLE = new SimpleParticleType(false);
+    public static final SimpleParticleType FART_PARTICLE = new SimpleParticleType(false);
 
     public static void init() {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, AdventureMain.identifierOf("amethyst_shard_particle"), AMETHYST_SHARD_PARTICLE);
@@ -28,7 +24,6 @@ public class ParticleInit {
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, AdventureMain.identifierOf("fart_particle"), FART_PARTICLE);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class FartParticle extends ExplodeParticle {
 
         public FartParticle(ClientLevel clientWorld, double d, double e, double f, double g, double h, double i, SpriteSet spriteProvider) {
@@ -39,7 +34,6 @@ public class ParticleInit {
             this.bCol = 0f;
         }
 
-        @Environment(EnvType.CLIENT)
         public static class Factory implements ParticleProvider<SimpleParticleType> {
             private final SpriteSet spriteProvider;
 
@@ -54,7 +48,6 @@ public class ParticleInit {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public static class ShardParticle extends TextureSheetParticle {
         static final Random RANDOM = new Random();
         private final SpriteSet spriteProvider;
@@ -95,11 +88,10 @@ public class ParticleInit {
             this.setSpriteFromAge(this.spriteProvider);
         }
 
-        @Environment(EnvType.CLIENT)
         public static class ShardFactory implements ParticleProvider<SimpleParticleType> {
             private final SpriteSet spriteProvider;
 
-            public ShardFactory(FabricSpriteProvider sprites) {
+            public ShardFactory(SpriteSet sprites) {
                 this.spriteProvider = sprites;
             }
 
@@ -129,7 +121,6 @@ public class ParticleInit {
 
     }
 
-    @Environment(EnvType.CLIENT)
     public static class VoidCloudParticle extends TextureSheetParticle {
         private final double startX;
         private final double startY;
@@ -207,7 +198,6 @@ public class ParticleInit {
             }
         }
 
-        @Environment(EnvType.CLIENT)
         public static class CloudFactory implements ParticleProvider<SimpleParticleType> {
             private final SpriteSet spriteProvider;
 
@@ -224,7 +214,6 @@ public class ParticleInit {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     static class SprintParticle extends TextureSheetParticle {
         static final Random RANDOM = new Random();
         private final SpriteSet spriteProvider;
@@ -250,11 +239,10 @@ public class ParticleInit {
             this.setSpriteFromAge(this.spriteProvider);
         }
 
-        @Environment(EnvType.CLIENT)
         public static class SprintFactory implements ParticleProvider<SimpleParticleType> {
             private final SpriteSet spriteProvider;
 
-            public SprintFactory(FabricSpriteProvider sprites) {
+            public SprintFactory(SpriteSet sprites) {
                 this.spriteProvider = sprites;
             }
 

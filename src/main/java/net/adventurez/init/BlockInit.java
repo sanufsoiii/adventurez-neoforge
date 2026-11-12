@@ -1,7 +1,6 @@
 package net.adventurez.init;
 
 import net.adventurez.AdventureMain;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +31,7 @@ public class BlockInit {
 
     private static Block register(ResourceLocation id, Block block) {
         Item item = Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, new Item.Properties()));
-        ItemGroupEvents.modifyEntriesEvent(ItemInit.ADVENTUREZ_ITEM_GROUP).register(entries -> entries.accept(item));
+        CreativeTabEntries.add(ItemInit.ADVENTUREZ_ITEM_GROUP, item);
 
         return Registry.register(BuiltInRegistries.BLOCK, id, block);
     }
