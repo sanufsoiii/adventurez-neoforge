@@ -7,14 +7,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.adventurez.init.ItemInit;
 import net.adventurez.item.GildedNetheriteArmor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ScreenEffectRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
-@Environment(EnvType.CLIENT)
 @Mixin(ScreenEffectRenderer.class)
 public abstract class InGameOverlayRendererMixin {
 

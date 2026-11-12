@@ -7,14 +7,11 @@ import net.adventurez.entity.model.DragonModel;
 import net.adventurez.entity.render.feature.DragonEyesFeatureRenderer;
 import net.adventurez.entity.render.feature.DragonSaddleFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class DragonRenderer extends MobRenderer<DragonEntity, DragonModel<DragonEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/dragon.png");
     private static final ResourceLocation RED_DRAGON_TEXTURE = AdventureMain.identifierOf("textures/entity/red_dragon.png");

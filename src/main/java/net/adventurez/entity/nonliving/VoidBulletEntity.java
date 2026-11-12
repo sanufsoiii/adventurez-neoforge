@@ -2,8 +2,6 @@ package net.adventurez.entity.nonliving;
 
 import net.adventurez.entity.VoidShadeEntity;
 import net.adventurez.init.EntityInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -29,7 +27,6 @@ public class VoidBulletEntity extends AbstractHurtingProjectile {
         super(entityType, world);
     }
 
-    @Environment(EnvType.CLIENT)
     public VoidBulletEntity(Level world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
         this(EntityInit.VOID_BULLET, world);
         this.moveTo(x, y, z, this.getYRot(), this.getXRot());
@@ -85,7 +82,6 @@ public class VoidBulletEntity extends AbstractHurtingProjectile {
         return false;
     }
 
-    @Environment(EnvType.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distance) {
         return distance < 16384.0D;
     }

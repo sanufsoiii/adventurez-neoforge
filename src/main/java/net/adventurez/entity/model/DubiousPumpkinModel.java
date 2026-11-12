@@ -5,8 +5,6 @@ import net.minecraft.client.model.*;
 import com.google.common.collect.ImmutableList;
 
 import net.adventurez.entity.DubiousPumpkinEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -16,7 +14,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class DubiousPumpkinModel<T extends DubiousPumpkinEntity> extends ListModel<T> {
     private final ModelPart root;
     private final ModelPart waist;

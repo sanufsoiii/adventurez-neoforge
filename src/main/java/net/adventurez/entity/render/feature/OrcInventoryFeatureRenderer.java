@@ -4,8 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.adventurez.entity.OrcEntity;
 import net.adventurez.entity.model.OrcModel;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,7 +12,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemDisplayContext;
 
-@Environment(EnvType.CLIENT)
 public class OrcInventoryFeatureRenderer extends RenderLayer<OrcEntity, OrcModel<OrcEntity>> {
 
     public OrcInventoryFeatureRenderer(RenderLayerParent<OrcEntity, OrcModel<OrcEntity>> featureRendererContext) {

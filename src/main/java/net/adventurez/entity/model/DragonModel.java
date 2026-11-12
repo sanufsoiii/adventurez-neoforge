@@ -3,8 +3,6 @@ package net.adventurez.entity.model;
 import com.google.common.collect.ImmutableList;
 
 import net.adventurez.entity.DragonEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -16,7 +14,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-@Environment(EnvType.CLIENT)
 public class DragonModel<T extends DragonEntity> extends ListModel<T> {
     private final ModelPart body;
     private final ModelPart chest;

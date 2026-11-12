@@ -11,8 +11,6 @@ import net.adventurez.entity.model.VoidShadowModel;
 import net.adventurez.entity.render.feature.VoidShadowBlackFeatureRenderer;
 import net.adventurez.entity.render.feature.VoidShadowEyesFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -23,7 +21,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-@Environment(EnvType.CLIENT)
 public class VoidShadowRenderer extends MobRenderer<VoidShadowEntity, VoidShadowModel<VoidShadowEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/void_shadow.png");
 

@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.adventurez.AdventureMain;
 import net.adventurez.entity.model.TinyEyeModel;
 import net.adventurez.entity.nonliving.TinyEyeEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -15,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class TinyEyeRenderer extends EntityRenderer<TinyEyeEntity> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/the_eye.png");
     private final TinyEyeModel<TinyEyeEntity> model = new TinyEyeModel<>(TinyEyeModel.getTexturedModelData().bakeRoot());

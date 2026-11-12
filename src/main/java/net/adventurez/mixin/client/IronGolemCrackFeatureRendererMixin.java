@@ -8,16 +8,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.layers.IronGolemCrackinessLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Crackiness;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.adventurez.access.EntityAccess;
-import net.fabricmc.api.EnvType;
 
-@Environment(EnvType.CLIENT)
 @Mixin(IronGolemCrackinessLayer.class)
 public class IronGolemCrackFeatureRendererMixin {
 

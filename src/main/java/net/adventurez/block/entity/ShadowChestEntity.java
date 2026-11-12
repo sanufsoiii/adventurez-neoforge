@@ -5,7 +5,7 @@ import net.adventurez.init.ConfigInit;
 import net.adventurez.init.ItemInit;
 import net.adventurez.init.SoundInit;
 import net.adventurez.mixin.accessor.ChestLidAnimatorAccessor;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup.Provider;
@@ -192,7 +192,7 @@ public class ShadowChestEntity extends RandomizableContainerBlockEntity implemen
                     .getRandomItems(new LootParams.Builder((ServerLevel) this.getLevel()).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition)).create(LootContextParamSets.CHEST));
 
             for (int i = 0; i < 27; i++) {
-                if (i == 20 && this.getLevel().getRandom().nextFloat() < 0.2F && FabricLoader.getInstance().isModLoaded("medievalweapons")) {
+                if (i == 20 && this.getLevel().getRandom().nextFloat() < 0.2F && ModList.get().isLoaded("medievalweapons")) {
                     this.inventory.set(i, new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("medievalweapons", "thalleous_sword"))));
                     continue;
                 }

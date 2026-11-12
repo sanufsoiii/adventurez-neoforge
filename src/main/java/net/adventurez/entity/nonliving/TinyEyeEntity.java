@@ -3,8 +3,6 @@ package net.adventurez.entity.nonliving;
 import java.util.UUID;
 
 import net.adventurez.init.EntityInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -48,7 +46,6 @@ public class TinyEyeEntity extends AbstractHurtingProjectile {
         super(entityType, world);
     }
 
-    @Environment(EnvType.CLIENT)
     public TinyEyeEntity(Level world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
         this(EntityInit.TINY_EYE, world);
         this.moveTo(x, y, z, this.getYRot(), this.getXRot());
@@ -212,7 +209,6 @@ public class TinyEyeEntity extends AbstractHurtingProjectile {
         return false;
     }
 
-    @Environment(EnvType.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distance) {
         return distance < 16384.0D;
     }

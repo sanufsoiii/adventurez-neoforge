@@ -4,15 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.adventurez.block.entity.ChiseledPolishedBlackstoneHolderEntity;
 
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.fabricmc.api.EnvType;
 
-@Environment(EnvType.CLIENT)
 public class ChiseledPolishedBlackstoneHolderRenderer implements BlockEntityRenderer<ChiseledPolishedBlackstoneHolderEntity> {
 
     public ChiseledPolishedBlackstoneHolderRenderer(BlockEntityRendererProvider.Context ctx) {

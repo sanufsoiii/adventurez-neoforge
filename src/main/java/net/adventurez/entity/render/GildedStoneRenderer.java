@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.adventurez.AdventureMain;
 import net.adventurez.entity.model.GildedStoneModel;
 import net.adventurez.entity.nonliving.GildedBlackstoneShardEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,7 +13,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class GildedStoneRenderer extends EntityRenderer<GildedBlackstoneShardEntity> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/item/gilded_stone.png");
     private final GildedStoneModel model = new GildedStoneModel(GildedStoneModel.getTexturedModelData().bakeRoot());

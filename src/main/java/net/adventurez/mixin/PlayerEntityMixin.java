@@ -8,8 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import net.adventurez.init.ConfigInit;
 import net.adventurez.init.ItemInit;
 import net.adventurez.item.GildedNetheriteArmor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +36,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     @Override
     public boolean displayFireAnimation() {
         ItemStack golemChestplate = this.getItemBySlot(EquipmentSlot.CHEST);

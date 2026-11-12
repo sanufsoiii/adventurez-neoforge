@@ -7,13 +7,10 @@ import net.adventurez.entity.model.BlackstoneGolemModel;
 import net.adventurez.entity.render.feature.BlackstoneGolemBlueLavaFeatureRenderer;
 import net.adventurez.entity.render.feature.StoneGolemLavaFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class BlackstoneGolemRenderer extends MobRenderer<BlackstoneGolemEntity, BlackstoneGolemModel<BlackstoneGolemEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/blackstone_golem.png");
 

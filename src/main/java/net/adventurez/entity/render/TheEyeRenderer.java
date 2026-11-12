@@ -7,8 +7,6 @@ import net.adventurez.AdventureMain;
 import net.adventurez.entity.TheEyeEntity;
 import net.adventurez.entity.model.TheEyeModel;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -22,7 +20,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
 public class TheEyeRenderer extends MobRenderer<TheEyeEntity, TheEyeModel<TheEyeEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/the_eye.png");
     private static final ResourceLocation EXPLOSION_BEAM_TEXTURE = AdventureMain.identifierOf("textures/entity/eye_beam.png");

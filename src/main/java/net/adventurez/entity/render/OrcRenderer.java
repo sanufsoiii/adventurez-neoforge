@@ -6,14 +6,11 @@ import net.adventurez.entity.OrcEntity;
 import net.adventurez.entity.model.OrcModel;
 import net.adventurez.entity.render.feature.OrcInventoryFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class OrcRenderer extends MobRenderer<OrcEntity, OrcModel<OrcEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/orc.png");
 

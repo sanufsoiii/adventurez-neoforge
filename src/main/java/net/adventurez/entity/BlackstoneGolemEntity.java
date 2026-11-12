@@ -8,9 +8,7 @@ import net.adventurez.entity.nonliving.ThrownRockEntity;
 import net.adventurez.init.EntityInit;
 import net.adventurez.init.SoundInit;
 import net.adventurez.init.TagInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -81,7 +79,7 @@ public class BlackstoneGolemEntity extends Monster {
 
     private final ServerBossEvent bossBar;
 
-    private final boolean isDungeonZLoaded = FabricLoader.getInstance().isModLoaded("dungeonz");
+    private final boolean isDungeonZLoaded = ModList.get().isLoaded("dungeonz");
 
     public BlackstoneGolemEntity(EntityType<? extends BlackstoneGolemEntity> entityType, Level world) {
         super(entityType, world);
@@ -364,7 +362,6 @@ public class BlackstoneGolemEntity extends Monster {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte status) {
 
         if (status == 4) {
@@ -377,17 +374,14 @@ public class BlackstoneGolemEntity extends Monster {
         super.handleEntityEvent(status);
     }
 
-    @Environment(EnvType.CLIENT)
     public int getAttackTick() {
         return this.attackTick;
     }
 
-    @Environment(EnvType.CLIENT)
     public int getStunTick() {
         return this.stunTick;
     }
 
-    @Environment(EnvType.CLIENT)
     public int getRoarTick() {
         return this.roarTick;
     }

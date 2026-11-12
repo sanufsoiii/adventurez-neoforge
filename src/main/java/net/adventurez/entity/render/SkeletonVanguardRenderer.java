@@ -4,13 +4,10 @@ import net.adventurez.AdventureMain;
 import net.adventurez.entity.SkeletonVanguardEntity;
 import net.adventurez.entity.model.SkeletonVanguardModel;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class SkeletonVanguardRenderer extends MobRenderer<SkeletonVanguardEntity, SkeletonVanguardModel<SkeletonVanguardEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/skeleton_vanguard.png");
 

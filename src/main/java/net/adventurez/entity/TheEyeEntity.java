@@ -10,7 +10,7 @@ import net.adventurez.init.EntityInit;
 import net.adventurez.init.ItemInit;
 import net.adventurez.init.SoundInit;
 import net.adventurez.init.TagInit;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -81,7 +81,7 @@ public class TheEyeEntity extends FlyingMob implements Enemy {
     private int deathTimer;
     private int duplicationTimer = 0;
 
-    private final boolean isVoidZLoaded = FabricLoader.getInstance().isModLoaded("voidz");
+    private final boolean isVoidZLoaded = ModList.get().isLoaded("voidz");
 
     public TheEyeEntity(EntityType<? extends TheEyeEntity> entityType, Level world) {
         super(entityType, world);

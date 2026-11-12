@@ -6,8 +6,6 @@ import com.mojang.math.Axis;
 import net.adventurez.block.PiglinFlag;
 import net.adventurez.block.entity.PiglinFlagEntity;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -26,7 +24,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-@Environment(EnvType.CLIENT)
 public class PiglinFlagRenderer implements BlockEntityRenderer<PiglinFlagEntity> {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("adventurez", "textures/block/piglin_flag.png");

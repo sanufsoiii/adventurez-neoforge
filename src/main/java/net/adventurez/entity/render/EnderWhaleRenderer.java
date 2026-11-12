@@ -5,13 +5,10 @@ import net.adventurez.entity.EnderWhaleEntity;
 import net.adventurez.entity.model.EnderWhaleModel;
 import net.adventurez.entity.render.feature.EnderWhaleGlowFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class EnderWhaleRenderer extends MobRenderer<EnderWhaleEntity, EnderWhaleModel<EnderWhaleEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/ender_whale.png");
 

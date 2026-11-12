@@ -3,8 +3,6 @@ package net.adventurez.entity.model;
 import com.google.common.collect.ImmutableList;
 
 import net.adventurez.entity.TheEyeEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,7 +11,6 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
-@Environment(EnvType.CLIENT)
 public class TheEyeModel<T extends TheEyeEntity> extends ListModel<T> {
     private final ModelPart middle;
     private final ModelPart leftSite;

@@ -7,13 +7,10 @@ import net.adventurez.entity.model.SummonerModel;
 import net.adventurez.entity.render.feature.SummonerEntityShieldFeatureRenderer;
 import net.adventurez.entity.render.feature.SummonerEyesFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class SummonerRenderer extends MobRenderer<SummonerEntity, SummonerModel<SummonerEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/summoner.png");
 

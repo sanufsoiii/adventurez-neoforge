@@ -6,13 +6,10 @@ import net.adventurez.entity.SoulReaperEntity;
 import net.adventurez.entity.model.SoulReaperModel;
 import net.adventurez.entity.render.feature.SoulReaperEyesFeatureRenderer;
 import net.adventurez.init.RenderInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-@Environment(EnvType.CLIENT)
 public class SoulReaperRenderer extends HumanoidMobRenderer<SoulReaperEntity, SoulReaperModel<SoulReaperEntity>> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/soul_reaper.png");
 

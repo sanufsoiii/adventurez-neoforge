@@ -3,8 +3,6 @@ package net.adventurez.entity.nonliving;
 import net.adventurez.init.EffectInit;
 import net.adventurez.init.EntityInit;
 import net.adventurez.init.SoundInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,14 +43,12 @@ public class ThrownRockEntity extends ThrowableItemProjectile {
     }
 
     // getLandingBlockState found at addSoulSpeedBoostIfNeeded in LivingEntity
-    @Environment(EnvType.CLIENT)
     private ParticleOptions getParticleParameters() {
         BlockState state = this.getBlockStateOnLegacy();
         return new BlockParticleOption(ParticleTypes.BLOCK, state);
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte status) {
         if (status == 3) {
             ParticleOptions particleEffect = this.getParticleParameters();

@@ -3,8 +3,6 @@ package net.adventurez.entity.model;
 import com.google.common.collect.ImmutableList;
 
 import net.adventurez.entity.VoidFragmentEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -15,7 +13,6 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
-@Environment(EnvType.CLIENT)
 public class VoidFragmentModel<T extends Entity> extends ListModel<T> {
     private final ModelPart small;
     private final ModelPart small1;

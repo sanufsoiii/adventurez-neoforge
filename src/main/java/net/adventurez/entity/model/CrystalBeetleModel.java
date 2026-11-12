@@ -4,8 +4,6 @@ import net.minecraft.client.model.*;
 
 import com.google.common.collect.ImmutableList;
 import net.adventurez.entity.CrystalBeetleEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -15,7 +13,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class CrystalBeetleModel<T extends CrystalBeetleEntity> extends ListModel<T> {
     private final ModelPart body;
     private final ModelPart right_front_leg;

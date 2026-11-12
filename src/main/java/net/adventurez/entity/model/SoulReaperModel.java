@@ -1,8 +1,6 @@
 package net.adventurez.entity.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-@Environment(EnvType.CLIENT)
 public class SoulReaperModel<T extends Mob & RangedAttackMob> extends HumanoidModel<T> {
 
     public SoulReaperModel(ModelPart modelPart) {

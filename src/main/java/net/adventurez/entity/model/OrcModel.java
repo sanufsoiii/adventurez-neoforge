@@ -3,8 +3,6 @@ package net.adventurez.entity.model;
 import com.google.common.collect.ImmutableList;
 
 import net.adventurez.entity.OrcEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,7 +12,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class OrcModel<T extends OrcEntity> extends ListModel<T> {
     private final ModelPart leftLeg;
     private final ModelPart rightLeg;

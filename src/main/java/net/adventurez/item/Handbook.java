@@ -2,7 +2,7 @@ package net.adventurez.item;
 
 import net.adventurez.AdventureMain;
 import net.adventurez.init.ConfigInit;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Handbook extends Item {
 
-    private final boolean isPatchouliLoaded = FabricLoader.getInstance().isModLoaded("patchouli");
+    private final boolean isPatchouliLoaded = ModList.get().isLoaded("patchouli");
 
     private static final List<Filterable<Component>> PAGES = List.of(
             Filterable.passThrough(Component.literal("You may ask yourself, what does NRTTM mean... It does mean: Not related to the mod :D This are just some sentences I put together because I like to do it^^ First of all, thank you for playing the AdventureZ mod, I hope it will give your world a little bit more of a challenge and")),

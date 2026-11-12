@@ -7,7 +7,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.LoadingModList;
 
 public class AdventurezMixinPlugin implements IMixinConfigPlugin {
 
@@ -22,9 +22,9 @@ public class AdventurezMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains("AnvilScreenHandlerCompatMixin") && FabricLoader.getInstance().isModLoaded("overenchanted"))
+        if (mixinClassName.contains("AnvilScreenHandlerCompatMixin") && (LoadingModList.get().getModFileById("overenchanted") != null))
             return false;
-        if (mixinClassName.contains("EnchantedBookItemMixin") && !FabricLoader.getInstance().isModLoaded("overenchanted"))
+        if (mixinClassName.contains("EnchantedBookItemMixin") && !(LoadingModList.get().getModFileById("overenchanted") != null))
             return false;
         return true;
     }

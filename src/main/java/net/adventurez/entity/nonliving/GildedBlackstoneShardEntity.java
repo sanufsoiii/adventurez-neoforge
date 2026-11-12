@@ -2,8 +2,6 @@ package net.adventurez.entity.nonliving;
 
 import net.adventurez.init.EntityInit;
 import net.adventurez.init.ItemInit;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +31,6 @@ public class GildedBlackstoneShardEntity extends ThrowableItemProjectile {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte status) {
         if (status == 3) {
             for (int i = 0; i < 22; ++i) {

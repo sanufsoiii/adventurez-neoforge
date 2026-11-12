@@ -5,8 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.adventurez.AdventureMain;
 import net.adventurez.entity.model.VoidBulletModel;
 import net.adventurez.entity.nonliving.VoidBulletEntity;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -15,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-@Environment(EnvType.CLIENT)
 public class VoidBulletRenderer extends EntityRenderer<VoidBulletEntity> {
     private static final ResourceLocation TEXTURE = AdventureMain.identifierOf("textures/entity/void_bullet.png");
     private final VoidBulletModel<VoidBulletEntity> model = new VoidBulletModel<>(VoidBulletModel.getTexturedModelData().bakeRoot());

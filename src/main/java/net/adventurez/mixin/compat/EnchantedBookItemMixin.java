@@ -5,7 +5,7 @@ import java.util.List;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.adventurez.init.ItemInit;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.ModList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
@@ -19,7 +19,7 @@ public abstract class EnchantedBookItemMixin extends Item {
         super(settings);
     }
 
-    private final boolean isOverEnchantedLoaded = FabricLoader.getInstance().isModLoaded("overenchanted");
+    private final boolean isOverEnchantedLoaded = ModList.get().isLoaded("overenchanted");
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag type) {
