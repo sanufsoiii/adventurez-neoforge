@@ -24,7 +24,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         super(type, world);
     };
 
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;scalesWithDifficulty()Z"), cancellable = true)
+    // NeoForge replaces the vanilla scalesWithDifficulty() branch (now "if (false && ...)", compiled away) with
+    // source.type().scaling().getScalingFunction(); the first source.type() call is the same point in hurt().
+    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;type()Lnet/minecraft/world/damagesource/DamageType;", ordinal = 0), cancellable = true)
     private void damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         if (this.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemInit.GILDED_NETHERITE_CHESTPLATE && GildedNetheriteArmor.fullGolemArmor((Player) (Object) this)) {
             if (source.is(DamageTypeTags.IS_FIRE) && !GildedNetheriteArmor.isStoneGolemArmorActive(this.getItemBySlot(EquipmentSlot.CHEST))) {
