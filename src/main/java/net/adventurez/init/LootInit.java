@@ -1,6 +1,7 @@
 package net.adventurez.init;
 
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.event.LootTableLoadEvent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -23,18 +24,20 @@ public class LootInit {
         return false;
     }
 
-    public static void init() {
-        LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
+    public static void init(IEventBus gameBus) {
+        gameBus.addListener(LootTableLoadEvent.class, event -> {
+            ResourceKey<LootTable> key = event.getKey();
+            LootTable table = event.getTable();
             if (addedLootTable(key)) {
-                LootPool pool = LootPool.lootPool().with(LootItem.lootTableItem(ItemInit.GILDED_BLACKSTONE_SHARD).build()).setRolls(BinomialDistributionGenerator.binomial(1, 0.01F)).build();
-                tableBuilder.pool(pool);
+                LootPool pool = LootPool.lootPool().add(LootItem.lootTableItem(ItemInit.GILDED_BLACKSTONE_SHARD)).setRolls(BinomialDistributionGenerator.binomial(1, 0.01F)).build();
+                table.addPool(pool);
                 if (BuiltInLootTables.BASTION_TREASURE.equals(key)) {
-                    pool = LootPool.lootPool().with(LootItem.lootTableItem(ItemInit.GILDED_UPGRADE_SMITHING_TEMPLATE).build()).setRolls(BinomialDistributionGenerator.binomial(1, 0.5F)).build();
-                    tableBuilder.pool(pool);
+                    pool = LootPool.lootPool().add(LootItem.lootTableItem(ItemInit.GILDED_UPGRADE_SMITHING_TEMPLATE)).setRolls(BinomialDistributionGenerator.binomial(1, 0.5F)).build();
+                    table.addPool(pool);
                 }
             } else if ("minecraft:entities/piglin_brute".equals(key.location().toString())) {
-                LootPool pool = LootPool.lootPool().with(LootItem.lootTableItem(ItemInit.GILDED_BLACKSTONE_SHARD).build()).setRolls(BinomialDistributionGenerator.binomial(1, 0.1F)).build();
-                tableBuilder.pool(pool);
+                LootPool pool = LootPool.lootPool().add(LootItem.lootTableItem(ItemInit.GILDED_BLACKSTONE_SHARD)).setRolls(BinomialDistributionGenerator.binomial(1, 0.1F)).build();
+                table.addPool(pool);
             }
         });
 
