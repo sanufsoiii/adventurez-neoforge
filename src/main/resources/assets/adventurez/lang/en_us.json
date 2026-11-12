@@ -1,0 +1,13 @@
+{
+  "adventurez.port.assets.pack_name": "AdventureZ: original assets",
+  "adventurez.port.assets.pack_description": "Textures, models and sounds from your original AdventureZ jar",
+  "adventurez.port.assets.title": "AdventureZ — unofficial NeoForge port",
+  "adventurez.port.assets.text": "The original textures, models and sounds are copyrighted (All Rights Reserved), so they are not included in this port. Download the original mod for Fabric 1.21.1 and put the jar into the resourcepacks folder — the port will use only its graphics and sounds from it. You do not need to put it into the mods folder.",
+  "adventurez.port.assets.curseforge": "Download original (CurseForge)",
+  "adventurez.port.assets.modrinth": "Download original (Modrinth)",
+  "adventurez.port.assets.open_folder": "Open resourcepacks folder",
+  "adventurez.port.assets.recheck": "Check again",
+  "adventurez.port.assets.continue": "Continue without assets",
+  "adventurez.port.assets.dont_show": "Don't show again",
+  "adventurez.port.assets.not_found": "File not found in resourcepacks"
+}
