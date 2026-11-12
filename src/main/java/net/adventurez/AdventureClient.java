@@ -5,6 +5,7 @@ import net.adventurez.config.AdventureConfig;
 import net.adventurez.init.KeybindInit;
 import net.adventurez.init.ModelInit;
 import net.adventurez.init.RenderInit;
+import net.adventurez.port.assets.AssetNotice;
 import net.adventurez.port.assets.OriginalAssetsPackFinder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -37,6 +38,7 @@ public class AdventureClient {
 
         // Port self-check: log when the title screen is reached, optionally exit (runClientSmoke).
         NeoForge.EVENT_BUS.addListener(ScreenEvent.Opening.class, AdventureClient::onScreenOpening);
+        NeoForge.EVENT_BUS.addListener(ScreenEvent.Opening.class, AssetNotice::onScreenOpening);
     }
 
     private static void onScreenOpening(ScreenEvent.Opening event) {
